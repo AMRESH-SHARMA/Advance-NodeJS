@@ -1,5 +1,6 @@
 const User = require("../models/userModel")
 const bcrypt = require('bcrypt');
+const Address = require("../models/addressModel");
 
 exports.register = async (req, res) => {
   try {
@@ -11,6 +12,7 @@ exports.register = async (req, res) => {
       email: req.body.email,
       pass: hash
     });
+
     await registerData.save()
       .then((result) => { res.json({ success: true, data: result }) });
   } catch (error) {
@@ -54,6 +56,40 @@ exports.infoAllUsers = async (req, res) => {
     var { page } = req.query;
     let data = await User.paginate({}, { page: page, limit: 10 })
 
+    res.status(200).json({ success: true, data: data })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+exports.addAddress = async (req, res) => {
+  try {
+    const data = {
+      user_id: req.body.user_id,
+      pin_code: req.body.pin_code,
+      user_address: req.body.user_address,
+    };
+    const newPost = await Address.create(data);
+    const user = await User.findById(req.body.user_id);
+    user.address.push(newPost._id)
+    const result = await user.save();
+    res.status(200).json({ success: true, data: result })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.allInfoByUserId = async (req, res) => {
+  try {
+    let data = await User.findById(req.params.id)
+    .populate('address')
     res.status(200).json({ success: true, data: data })
   } catch (error) {
     res.status(400).json({

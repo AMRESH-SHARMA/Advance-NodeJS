@@ -21,7 +21,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: [true, "Email already exists"]
   },
-
+  address: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Address'
+    }
+  ]
 });
 
 userSchema.plugin(mongoosePaginate);
