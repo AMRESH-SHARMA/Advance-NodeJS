@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { register, login, info } = require("../controllers/userController");
-const { validateRegister, validateLogin, validateAccessToken } = require('../middlewares/validators/userValidator');
+const { register, login, info, infoAllUsers } = require("../controllers/userController");
+const { validateRegister, validateLogin, validateAccessToken, validatePageQuery } = require('../middlewares/validators/userValidator');
 const { isAuthenticated } = require('../middlewares/auth');
 
 
@@ -12,5 +12,7 @@ router.route("/register").post(validateRegister, register)
 router.route("/login").post(validateLogin, login)
 
 router.route("/info").get(validateAccessToken,isAuthenticated,info)
+
+router.route('/list').get(validatePageQuery,isAuthenticated,infoAllUsers)
 
 module.exports = router;

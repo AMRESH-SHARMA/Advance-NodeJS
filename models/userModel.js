@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 function toLower(str) {
   return str.toLowerCase();
@@ -22,5 +23,7 @@ const userSchema = new mongoose.Schema({
   },
 
 });
+
+userSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("User", userSchema); 

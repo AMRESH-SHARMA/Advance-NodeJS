@@ -1,4 +1,4 @@
-const { check, validationResult } = require('express-validator');
+const { check, query, validationResult } = require('express-validator');
 const User = require("../../models/userModel")
 
 exports.validateRegister = [
@@ -83,6 +83,23 @@ exports.validateAccessToken = [
     .bail()
     .notEmpty()
     .withMessage('Access Token can not be empty')
+    .bail(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ errors: errors.array() });
+    next();
+  },
+];
+
+
+exports.validatePageQuery = [
+  query('page')
+    .exists()
+    .notEmpty()
+    .trim()
+    .isInt()
+    .withMessage('Query is not valid integer')
     .bail(),
   (req, res, next) => {
     const errors = validationResult(req);

@@ -12,7 +12,7 @@ exports.register = async (req, res) => {
       pass: hash
     });
     await registerData.save()
-      .then((result) => { res.send(result) });
+      .then((result) => { res.json({ success: true, data: result }) });
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -27,7 +27,7 @@ exports.login = async (req, res) => {
     var data = await User.findOne({ username: req.body.username }).select('+pass')
     if (data) {
       bcrypt.compare(req.body.pass, data.pass)
-        .then(() => res.status(200).json({ result: "Login sucessfully", acccess_token: data._id }))
+        .then(() => res.status(200).json({ result: "Login sucessfully", access_token: data._id }))
     }
   } catch (error) {
     res.status(400).json({
@@ -39,7 +39,22 @@ exports.login = async (req, res) => {
 
 exports.info = async (req, res) => {
   try {
-    res.status(200).send(req.user)
+    res.status(200).json({ success: true, data: req.user })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+exports.infoAllUsers = async (req, res) => {
+  try {
+    var { page } = req.query;
+    let data = await User.paginate({}, { page: page, limit: 10 })
+
+    res.status(200).json({ success: true, data: data })
   } catch (error) {
     res.status(400).json({
       success: false,

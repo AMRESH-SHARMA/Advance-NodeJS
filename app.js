@@ -11,12 +11,12 @@ if (process.env.NODE_ENV !== "production") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req,res) => {
-  res.send("GET Request Called Connected to Cloud")
+app.get('/', (req, res) => {
+  res.json({ success: true, data: "GET Request Called Connected to Cloud" })
 })
 //____
 const user = require("./routes/userRoute");
 //____
-app.use("/api/", user);
+app.use("/user", user);
 
 module.exports = app
