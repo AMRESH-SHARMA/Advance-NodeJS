@@ -1,4 +1,4 @@
-const { check, query, validationResult } = require('express-validator');
+const { check, query, validationResult, param } = require('express-validator');
 const User = require("../../models/userModel")
 
 exports.validateRegister = [
@@ -109,25 +109,10 @@ exports.validatePageQuery = [
   },
 ];
 
-
-exports.validateAddress = [
-  check('user_id')
+exports.validateParam = [
+  param('id')
     .exists()
-    .notEmpty()
-    .withMessage('User id can not be empty!')
-    .bail(),
-  check('pin_code')
-    .exists()
-    .notEmpty()
-    .withMessage('Pin Code can not be empty!')
-    .bail()
-    .isInt()
-    .withMessage("Pin Code can not be Non Integer")
-    .bail(),
-  check('user_address')
-    .exists()
-    .notEmpty()
-    .withMessage('Address can not be empty')
+    .withMessage('Param does not Exist')
     .bail(),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -136,3 +121,4 @@ exports.validateAddress = [
     next();
   },
 ];
+

@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
 })
 //____
 const user = require("./routes/userRoute");
+const address = require("./routes/addressRoute");
 //____
 app.use("/user", user);
 
