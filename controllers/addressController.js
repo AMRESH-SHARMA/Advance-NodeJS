@@ -20,3 +20,19 @@ exports.addAddress = async (req, res) => {
     });
   }
 };
+
+
+exports.deleteAddress = async (req, res) => {
+  try {
+    let userUpdate = await User.updateMany({}, { $pull: { address: { $in: req.body._id } } })
+    if(userUpdate){
+      let result = await Address.deleteMany({ _id: { $in: req.body._id } })
+      return res.status(200).json({ success: true, data: `${result.deletedCount} Records Deleted` })
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

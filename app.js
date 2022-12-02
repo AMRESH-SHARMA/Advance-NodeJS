@@ -19,5 +19,6 @@ const user = require("./routes/userRoute");
 const address = require("./routes/addressRoute");
 //____
 app.use("/user", user);
+app.use("/user", address);
 
 module.exports = app
